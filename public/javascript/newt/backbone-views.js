@@ -2315,6 +2315,11 @@ var PathsBetweenQueryView = Backbone.View.extend({
     },
 });
 
+
+/**
+ * Paths Between Query view SIFGraph for the Sample Application.
+ */
+
 var PathsBetweenSIFgraphQueryView = Backbone.View.extend({
     defaultQueryParameters: {
         directed: '',
@@ -2339,7 +2344,7 @@ var PathsBetweenSIFgraphQueryView = Backbone.View.extend({
         $(self.el).html(self.template);
         console.log("on clicking pathsbetweentest backbone-views.js 2128");
         $(self.el).modal('show');
-        PCdialog = 'PathsBetweentest';
+        PCdialog = 'PathsBetweenSIFGraph';
 
         $(document)
             .off('click', '#save-query-pathsbetween-sifgraph')
@@ -2357,48 +2362,21 @@ var PathsBetweenSIFgraphQueryView = Backbone.View.extend({
                     document.getElementById('query-pathsbetween-sifgraph-length-limit').value
                 );
                 self.currentQueryParameters.source = document.getElementById('query-pathsbetween-sifgraph-source').value;
-                self.currentQueryParameters.pattern = Array.from(document.getElementById('query-pathsbetween-sifgraph-pattern').querySelectorAll("option:checked"),e=>e.value);
-
+                self.currentQueryParameters.source = self.currentQueryParameters.source.replaceAll(',','%2C')
+                self.currentQueryParameters.source = self.currentQueryParameters.source.replaceAll('\\n','&source=')
+                self.currentQueryParameters.pattern = Array.from(document.getElementById('query-pathsbetween-sifgraph-pattern').querySelectorAll("option:checked"),e=>e.value).toString().replaceAll(",","&pattern=");
+                
                 console.log(self.currentQueryParameters, "--------------")
-                // if (self.currentQueryParameters.limit > 3) {
-                //     $(self.el).modal('toggle');
-                //     new PromptInvalidLimitView({
-                //         el: '#prompt-invalidLimit-table',
-                //     }).render();
-                //     document.getElementById('query-pathsbetween-sifgraph-length-limit').focus();
-                //     return;
-                // }
-
-                // var queryURL =
-                //     'http://www.pathwaycommons.org/pc2/graph?format=SBGN&kind=PATHSBETWEEN&limit=1' +
-                //     self.currentQueryParameters.limit;
-                //             var geneSymbolsArray = geneSymbols
-                //                 .replaceAll('\n', ' ')
-                //                 .replaceAll('\t', ' ')
-                //                 .split(' ');
-
-                // var filename = '';
-                // var sources = '';
-                // for (var i = 0; i < geneSymbolsArray.length; i++) {
-                //     var currentGeneSymbol = geneSymbolsArray[i];
-                //     if (
-                //         currentGeneSymbol.length == 0 ||
-                //         currentGeneSymbol == ' ' ||
-                //         currentGeneSymbol == '\n' ||
-                //         currentGeneSymbol == '\t'
-                //     ) {
-                //         continue;
-                //     }
-                //     sources = sources + '&source=' + currentGeneSymbol;
-
-                //     if (filename == '') {
-                //         filename = currentGeneSymbol;
-                //     } else {
-                //         filename = filename + '_' + currentGeneSymbol;
-                //     }
-                // }
-                // filename = filename + '_PATHSBETWEEN.nwt';
-                // queryURL = queryURL + sources;
+                var queryURL =
+                    'https://www.pathwaycommons.org/sifgraph/v1/pathsbetween?directed='+ self.currentQueryParameters.directed + '&limit='+self.currentQueryParameters.limit + '&source='+ self.currentQueryParameters.source + '&pattern=' + self.currentQueryParameters.pattern;
+                console.log(queryURL, "--------------")
+                var filename = '';
+                    if (filename == '') {
+                        filename = self.currentQueryParameters.directed + self.currentQueryParameters.sources;
+                    } else {
+                        filename = filename + '_' + self.currentQueryParameters.directed + self.currentQueryParameters.sources;
+                    }
+                filename = filename + '_PATHSBETWEEN.nwt';
 
                 if (cy.nodes().length == 0) {
                     chiseInstance.startSpinner('paths-between-sifgraph-spinner');
@@ -2499,6 +2477,196 @@ var PathsBetweenSIFgraphQueryView = Backbone.View.extend({
                                         el: '#prompt-invalidQuery-table',
                                     }).render();
                                     chiseInstance.endSpinner('paths-between-sifgraph-spinner');
+                                },
+                            });
+
+                            $(self.el).modal('toggle');
+                        }
+                    );
+                }
+            });
+
+        $(document)
+            .off('click', '#cancel-query-pathsbetween-sifgraph')
+            .on('click', '#cancel-query-pathsbetween-sifgraph', function (evt) {
+                $(self.el).modal('toggle');
+            });
+
+        return this;
+    },
+});
+
+/**
+ * Neighborhood Query view SIFGraph for the Sample Application.
+ */
+
+ var NeighborhoodSIFgraphQueryView = Backbone.View.extend({
+    defaultQueryParameters: {
+        directed: '',
+        limit: 1,
+        source: '',
+        pattern: '',
+    },
+    currentQueryParameters: null,
+    initialize: function () {
+        var self = this;
+        self.copyProperties();
+        self.template = _.template($('#query-neighborhood-sifgraph-template').html());
+        self.template = self.template(self.currentQueryParameters);
+    },
+    copyProperties: function () {
+        this.currentQueryParameters = _.clone(this.defaultQueryParameters);
+    },
+    render: function () {
+        var self = this;
+        self.template = _.template($('#query-neighborhood-sifgraph-template').html());
+        self.template = self.template(self.currentQueryParameters);
+        $(self.el).html(self.template);
+        console.log("on clicking neighborhood sif backbone-views.js 2128");
+        $(self.el).modal('show');
+        PCdialog = 'neighborhoodtest';
+
+        $(document)
+            .off('click', '#save-query-neighborhood-sifgraph')
+            .on('click', '#save-query-neighborhood-sifgraph', function (evt) {
+                // use active chise instance
+                var chiseInstance = appUtilities.getActiveChiseInstance();
+
+                // use the associated cy instance
+                var cy = chiseInstance.getCy();
+
+                self.currentQueryParameters.directed = document.getElementById(
+                    'query-neighborhood-sifgraph-directed'
+                ).value;
+                self.currentQueryParameters.limit = Number(
+                    document.getElementById('query-neighborhood-sifgraph-length-limit').value
+                );
+                self.currentQueryParameters.source = document.getElementById('query-neighborhood-sifgraph-source').value;
+                self.currentQueryParameters.source = self.currentQueryParameters.source.replaceAll(',','%2C')
+                self.currentQueryParameters.source = self.currentQueryParameters.source.replaceAll('\\n','%2C')
+                self.currentQueryParameters.pattern = Array.from(document.getElementById('query-neighborhood-sifgraph-pattern').querySelectorAll("option:checked"),e=>e.value).toString().replaceAll(",","&pattern=");
+                
+                console.log(self.currentQueryParameters, "--------------")
+                var queryURL =
+                    'https://www.pathwaycommons.org/sifgraph/v1/pathsbetween?direction='+ self.currentQueryParameters.directed + '&limit='+self.currentQueryParameters.limit + '&source='+ self.currentQueryParameters.source + '&pattern=' + self.currentQueryParameters.pattern;
+                console.log(queryURL, "--------------")
+                var filename = '';
+                    if (filename == '') {
+                        filename = self.currentQueryParameters.directed + self.currentQueryParameters.sources;
+                    } else {
+                        filename = filename + '_' + self.currentQueryParameters.directed + self.currentQueryParameters.sources;
+                    }
+                filename = filename + '_NEIGHBORHOOD.nwt';
+
+                if (cy.nodes().length == 0) {
+                    chiseInstance.startSpinner('neighborhood-sifgraph-spinner');
+                    var currentGeneralProperties = appUtilities.getScratch(
+                        cy,
+                        'currentGeneralProperties'
+                    );
+                    var currentInferNestingOnLoad = currentGeneralProperties.inferNestingOnLoad;
+                    var currentLayoutProperties = appUtilities.getScratch(
+                        cy,
+                        'currentLayoutProperties'
+                    );
+
+                    $.ajax({
+                        type: 'get',
+                        url: '/utilities/testURL',
+                        data: { url: queryURL },
+                        success: function (data) {
+                            if (
+                                !data.error &&
+                                data.response.statusCode == 200 &&
+                                data.response.body
+                            ) {
+                                var xml = $.parseXML(data.response.body);
+                                $(document).trigger('sbgnvizLoadFile', [filename, cy]);
+                                currentGeneralProperties.inferNestingOnLoad = false;
+                                chiseInstance.updateGraph(
+                                    chiseInstance.convertSbgnmlToJson(xml),
+                                    undefined,
+                                    currentLayoutProperties
+                                );
+                                currentGeneralProperties.inferNestingOnLoad =
+                                    currentInferNestingOnLoad;
+                                chiseInstance.endSpinner('neighborhood-sifgraph-spinner');
+                                $(document).trigger('sbgnvizLoadFileEnd', [filename, cy]);
+                            } else if (data.response.body === '') {
+                                new PromptEmptyQueryResultView({
+                                    el: '#prompt-emptyQueryResult-table',
+                                }).render();
+                                chiseInstance.endSpinner('neighborhood-sifgraph-spinner');
+                            } else {
+                                new PromptInvalidQueryView({
+                                    el: '#prompt-invalidQuery-table',
+                                }).render();
+                                chiseInstance.endSpinner('neighborhood-sifgraph-spinner');
+                            }
+                        },
+                        error: function (xhr, options, err) {
+                            new PromptInvalidQueryView({
+                                el: '#prompt-invalidQuery-table',
+                            }).render();
+                            chiseInstance.endSpinner('neighborhood-sifgraph-spinner');
+                        },
+                    });
+
+                    $(self.el).modal('toggle');
+                } else {
+                    new PromptConfirmationView({ el: '#prompt-confirmation-table' }).render(
+                        function () {
+                            chiseInstance.startSpinner('neighborhood-sifgraph-spinner');
+                            var currentGeneralProperties = appUtilities.getScratch(
+                                cy,
+                                'currentGeneralProperties'
+                            );
+                            var currentInferNestingOnLoad =
+                                currentGeneralProperties.inferNestingOnLoad;
+                            var currentLayoutProperties = appUtilities.getScratch(
+                                cy,
+                                'currentLayoutProperties'
+                            );
+
+                            $.ajax({
+                                type: 'get',
+                                url: '/utilities/testURL',
+                                data: { url: queryURL },
+                                success: function (data) {
+                                    if (
+                                        !data.error &&
+                                        data.response.statusCode == 200 &&
+                                        data.response.body
+                                    ) {
+                                        var xml = $.parseXML(data.response.body);
+                                        $(document).trigger('sbgnvizLoadFile', [filename, cy]);
+                                        currentGeneralProperties.inferNestingOnLoad = false;
+                                        chiseInstance.updateGraph(
+                                            chiseInstance.convertSbgnmlToJson(xml),
+                                            undefined,
+                                            currentLayoutProperties
+                                        );
+                                        currentGeneralProperties.inferNestingOnLoad =
+                                            currentInferNestingOnLoad;
+                                        chiseInstance.endSpinner('neighborhood-sifgraph-spinner');
+                                        $(document).trigger('sbgnvizLoadFileEnd', [filename, cy]);
+                                    } else if (data.response.body === '') {
+                                        new PromptEmptyQueryResultView({
+                                            el: '#prompt-emptyQueryResult-table',
+                                        }).render();
+                                        chiseInstance.endSpinner('neighborhood-sifgraph-spinner');
+                                    } else {
+                                        new PromptInvalidQueryView({
+                                            el: '#prompt-invalidQuery-table',
+                                        }).render();
+                                        chiseInstance.endSpinner('neighborhood-sifgraph-spinner');
+                                    }
+                                },
+                                error: function (xhr, options, err) {
+                                    new PromptInvalidQueryView({
+                                        el: '#prompt-invalidQuery-table',
+                                    }).render();
+                                    chiseInstance.endSpinner('neighborhood-sifgraph-spinner');
                                 },
                             });
 
@@ -6501,6 +6669,7 @@ module.exports = {
     NeighborhoodQueryView: NeighborhoodQueryView,
     PathsBetweenQueryView: PathsBetweenQueryView,
     PathsBetweenSIFgraphQueryView: PathsBetweenSIFgraphQueryView,
+    NeighborhoodSIFgraphQueryView: NeighborhoodSIFgraphQueryView,
     PathsFromToQueryView: PathsFromToQueryView,
     CommonStreamQueryView: CommonStreamQueryView,
     PathsByURIQueryView: PathsByURIQueryView,
