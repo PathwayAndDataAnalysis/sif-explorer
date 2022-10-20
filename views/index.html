@@ -552,6 +552,8 @@
                                                     <ul class="dropdown-menu">
                                                         <li><a href="#" id="query-pathsbetween-sifgraph">Paths Between...</a>
                                                         </li>
+                                                        <li><a href="#" id="query-neighborhood-sifgraph">Neighborhood...</a>
+                                                        </li>
                                                     </ul>
                                                 </li>
                                             </ul>
@@ -1347,6 +1349,10 @@
                     </div>
 
                     <div id="query-neighborhood-table" tabindex="-1" class="modal fade" role="dialog">
+                        <!-- neighborhood query table will be shown here-->
+                    </div>
+
+                    <div id="query-neighborhood-sifgraph-table" tabindex="-1" class="modal fade" role="dialog">
                         <!-- neighborhood query table will be shown here-->
                     </div>
 
@@ -2482,6 +2488,73 @@
         <button id="save-query-pathsbetween-sifgraph" class="btn btn-default">OK</button>
         <button id="cancel-query-pathsbetween-sifgraph" class="btn btn-default">Cancel</button>
     </div>
+</div>
+</div>
+</script>
+
+<script type="text/template" id="query-neighborhood-sifgraph-template">
+    <div class="modal-dialog sbgn-modal-dialog" style="width: 510px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Neighborhood Query(NEW)</h4>
+            </div>
+            <div class="modal-body">
+                <table class="fullwidth parameters table-condensed layout-table">
+                    <thead>
+                      <tr>
+                      <th style="width: 100px; max-width: 100px" data-sw-translate="">Parameter</th>
+                      <th style="width: 310px; max-width: 310px" data-sw-translate="">Value</th>
+                      </tr>
+                    </thead>
+                    <tbody class="operation-params">
+          
+                    <tr><td class="code"><label for="query-neighborhood-sifgraph-directed">Direction</label></td>
+          <td>
+            <select class="parameter " name="directed" id="query-neighborhood-sifgraph-directed">
+                <option value="UPSTREAM">UPSTREAM</option>
+                <option value="DOWNSTREAM">DOWNSTREAM</option>
+                <option selected="" value="BOTHSTREAM">BOTHSTREAM (default)  </option>
+                <option value="UNDIRECTED">UNDIRECTED</option>
+            </select>
+          </td>
+        
+        </tr><tr><td class="code"><label for="query-neighborhood-sifgraph-length-limit">Limit</label></td>
+          <td>
+          <input class="parameter" minlength="0" name="limit" placeholder="" id="query-neighborhood-sifgraph-length-limit" type="text" value="1">
+          </td>
+        
+        </tr><tr><td class="code"><label for="query-neighborhood-sifgraph-source">Source</label></td>
+          <td>
+          <textarea class="body-textarea" name="source" id="query-neighborhood-sifgraph-source" placeholder="Provide multiple values in new lines."></textarea>
+          </td>
+      
+        </tr><tr><td class="code"><label for="query-neighborhood-sifgraph-pattern">Pattern</label></td>
+          <td>
+            <select multiple="multiple" class="parameter " name="pattern" id="query-neighborhood-sifgraph-pattern">
+                <option selected="" value=""></option>
+                <option value="CONTROLS_STATE_CHANGE_OF"> CONTROLS_STATE_CHANGE_OF  </option>
+                <option value="CONTROLS_PHOSPHORYLATION_OF"> CONTROLS_PHOSPHORYLATION_OF  </option>
+                <option value="CONTROLS_TRANSPORT_OF"> CONTROLS_TRANSPORT_OF  </option>
+                <option value="CONTROLS_EXPRESSION_OF"> CONTROLS_EXPRESSION_OF  </option>
+                <option value="IN_COMPLEX_WITH"> IN_COMPLEX_WITH  </option>
+                <option value="CATALYSIS_PRECEDES"> CATALYSIS_PRECEDES  </option>
+                <option value="INTERACTS_WITH"> INTERACTS_WITH  </option>
+                <option value="NEIGHBOR_OF"> NEIGHBOR_OF  </option>
+                <option value="CONSUMPTION_CONTROLLED_BY"> CONSUMPTION_CONTROLLED_BY  </option>
+                <option value="CONTROLS_PRODUCTION_OF"> CONTROLS_PRODUCTION_OF  </option>
+                <option value="CONTROLS_TRANSPORT_OF_CHEMICAL"> CONTROLS_TRANSPORT_OF_CHEMICAL  </option>
+                <option value="CHEMICAL_AFFECTS"> CHEMICAL_AFFECTS  </option>
+                <option value="REACTS_WITH"> REACTS_WITH  </option>
+                <option value="USED_TO_PRODUCE"> USED_TO_PRODUCE  </option>
+            </select>
+          </td>
+        </tr></tbody>
+    </table>
+<div class="modal-footer" style="text-align: center">
+<button id="save-query-neighborhood-sifgraph" class="btn btn-default">OK</button>
+<button id="cancel-query-neighborhood-sifgraph" class="btn btn-default">Cancel</button>
+</div>
 </div>
 </div>
 </script>

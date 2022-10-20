@@ -71,3 +71,20 @@ npm install
 
 npm start
 ```
+
+
+
+## Latest Updates:
+
+- Click on `> Query On SIF Graph Server` and you will see the newt window.
+
+- Now for querying SifGraph click on `Query button` in Newt window.
+
+- Two Options of query will open up select `SifGraph Server (NEW)`.
+
+- Select the query option from the dropdown menu.
+
+### ToDo:
+
+- Add API call to make query execute.
+- Add pending query options.

@@ -9,6 +9,7 @@ const tutorial = require('./tutorial');
 const sifStyleFactory = require('./sif-style-factory');
 const _ = require('underscore');
 const {Notyf} = require("notyf");
+const { NeighborhoodSIFgraphQueryView } = require('./backbone-views');
 
 // Handle sbgnviz menu functions which are to be triggered on events
 module.exports = function () {
@@ -18,7 +19,8 @@ module.exports = function () {
         generalPropertiesView,
         neighborhoodQueryView,
         pathsBetweenQueryView,
-        PathsBetweenSIFgraphQueryView,
+        pathsBetweenSIFgraphQueryView,
+        neighborhoodSIFgraphQueryView,
         pathsFromToQueryView,
         commonStreamQueryView,
         pathsByURIQueryView,
@@ -162,15 +164,17 @@ module.exports = function () {
         new BackboneViews.NeighborhoodQueryView({el: '#query-neighborhood-table'});
     pathsBetweenQueryView = appUtilities.pathsBetweenQueryView =
         new BackboneViews.PathsBetweenQueryView({el: '#query-pathsbetween-table'});
-    PathsBetweenSIFgraphQueryView = appUtilities.PathsBetweenSIFgraphQueryView =
-    new BackboneViews.PathsBetweenSIFgraphQueryView({el: '#query-pathsbetween-sifgraph-table'});
-    pathsFromToQueryView = appUtilities.pathsFromToQueryView =
+        pathsFromToQueryView = appUtilities.pathsFromToQueryView =
         new BackboneViews.PathsFromToQueryView({el: '#query-pathsfromto-table'});
-    commonStreamQueryView = appUtilities.commonStreamQueryView =
+        commonStreamQueryView = appUtilities.commonStreamQueryView =
         new BackboneViews.CommonStreamQueryView({el: '#query-commonstream-table'});
-    pathsByURIQueryView = appUtilities.pathsByURIQueryView = new BackboneViews.PathsByURIQueryView({
-        el: '#query-pathsbyURI-table',
-    });
+        pathsByURIQueryView = appUtilities.pathsByURIQueryView = new BackboneViews.PathsByURIQueryView({
+            el: '#query-pathsbyURI-table',
+        });
+    pathsBetweenSIFgraphQueryView = appUtilities.pathsBetweenSIFgraphQueryView =
+    new BackboneViews.PathsBetweenSIFgraphQueryView({el: '#query-pathsbetween-sifgraph-table'});
+    neighborhoodSIFgraphQueryView = appUtilities.neighborhoodSIFgraphQueryView =
+        new BackboneViews.NeighborhoodSIFgraphQueryView({el: '#query-neighborhood-sifgraph-table'});
     //promptSaveView = appUtilities.promptSaveView = new BackboneViews.PromptSaveView({el: '#prompt-save-table'}); // see PromptSaveView in backbone-views.js
     fileSaveView = appUtilities.fileSaveView = new BackboneViews.FileSaveView({
         el: '#file-save-table',
@@ -1307,7 +1311,12 @@ module.exports = function () {
 
         $('#query-pathsbetween-sifgraph, #query-pathsbetween-sifgraph-icon').click(function (e) {
             console.log("sdsadsdsa11111");
-            PathsBetweenSIFgraphQueryView.render();
+            pathsBetweenSIFgraphQueryView.render();
+        });
+
+        $('#query-neighborhood-sifgraph, #query-neighborhood-sifgraph-icon').click(function (e) {
+            console.log("neighborhood");
+            neighborhoodSIFgraphQueryView.render();
         });
 
         $('#query-pathsfromto').click(function (e) {
