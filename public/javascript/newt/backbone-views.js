@@ -1996,6 +1996,7 @@ var NeighborhoodQueryView = Backbone.View.extend({
                                 data.response.statusCode == 200 &&
                                 data.response.body
                             ) {
+                                console.log(type(data.response.body))
                                 var xml = $.parseXML(data.response.body);
                                 $(document).trigger('sbgnvizLoadFile', [filename, cy]);
                                 currentGeneralProperties.inferNestingOnLoad = false;
@@ -2548,7 +2549,7 @@ var PathsBetweenSIFgraphQueryView = Backbone.View.extend({
                 
                 console.log(self.currentQueryParameters, "--------------")
                 var queryURL =
-                    'https://www.pathwaycommons.org/sifgraph/v1/pathsbetween?direction='+ self.currentQueryParameters.directed + '&limit='+self.currentQueryParameters.limit + '&source='+ self.currentQueryParameters.source + '&pattern=' + self.currentQueryParameters.pattern;
+                    'http://localhost:8083/sifgraph/v1/neighborhood?direction='+ self.currentQueryParameters.directed + '&limit='+self.currentQueryParameters.limit + '&source='+ self.currentQueryParameters.source + '&pattern=' + self.currentQueryParameters.pattern;
                 console.log(queryURL, "--------------")
                 var filename = '';
                     if (filename == '') {
@@ -2569,17 +2570,23 @@ var PathsBetweenSIFgraphQueryView = Backbone.View.extend({
                         cy,
                         'currentLayoutProperties'
                     );
-
                     $.ajax({
                         type: 'get',
-                        url: '/utilities/testURL',
-                        data: { url: queryURL },
+                        url: queryURL,
+                        // crossDomain: true,
+                        dataType: 'jsonp',
+                        async: false,
+                        jsonpCallback: 'jsonCallback',
+                        contentType: "application/json",
                         success: function (data) {
+                            console.log("---------------55")
                             if (
                                 !data.error &&
                                 data.response.statusCode == 200 &&
                                 data.response.body
                             ) {
+                                console.log("---------------1")
+                                console.log(type(data.response.body))
                                 var xml = $.parseXML(data.response.body);
                                 $(document).trigger('sbgnvizLoadFile', [filename, cy]);
                                 currentGeneralProperties.inferNestingOnLoad = false;
@@ -2593,11 +2600,13 @@ var PathsBetweenSIFgraphQueryView = Backbone.View.extend({
                                 chiseInstance.endSpinner('neighborhood-sifgraph-spinner');
                                 $(document).trigger('sbgnvizLoadFileEnd', [filename, cy]);
                             } else if (data.response.body === '') {
+                                console.log("---------------2")
                                 new PromptEmptyQueryResultView({
                                     el: '#prompt-emptyQueryResult-table',
                                 }).render();
                                 chiseInstance.endSpinner('neighborhood-sifgraph-spinner');
                             } else {
+                                console.log("---------------3")
                                 new PromptInvalidQueryView({
                                     el: '#prompt-invalidQuery-table',
                                 }).render();
@@ -2605,6 +2614,7 @@ var PathsBetweenSIFgraphQueryView = Backbone.View.extend({
                             }
                         },
                         error: function (xhr, options, err) {
+                            console.log(xhr, options, err)
                             new PromptInvalidQueryView({
                                 el: '#prompt-invalidQuery-table',
                             }).render();
@@ -2614,6 +2624,7 @@ var PathsBetweenSIFgraphQueryView = Backbone.View.extend({
 
                     $(self.el).modal('toggle');
                 } else {
+                    console.log("---------------5")
                     new PromptConfirmationView({ el: '#prompt-confirmation-table' }).render(
                         function () {
                             chiseInstance.startSpinner('neighborhood-sifgraph-spinner');
@@ -2630,14 +2641,16 @@ var PathsBetweenSIFgraphQueryView = Backbone.View.extend({
 
                             $.ajax({
                                 type: 'get',
-                                url: '/utilities/testURL',
-                                data: { url: queryURL },
+                                url: queryURL,
+                                crossDomain: true,
+                                dataType: 'jsonp',
                                 success: function (data) {
                                     if (
                                         !data.error &&
                                         data.response.statusCode == 200 &&
                                         data.response.body
                                     ) {
+                                        console.log("---------------6")
                                         var xml = $.parseXML(data.response.body);
                                         $(document).trigger('sbgnvizLoadFile', [filename, cy]);
                                         currentGeneralProperties.inferNestingOnLoad = false;
@@ -2651,11 +2664,13 @@ var PathsBetweenSIFgraphQueryView = Backbone.View.extend({
                                         chiseInstance.endSpinner('neighborhood-sifgraph-spinner');
                                         $(document).trigger('sbgnvizLoadFileEnd', [filename, cy]);
                                     } else if (data.response.body === '') {
+                                        console.log("---------------7")
                                         new PromptEmptyQueryResultView({
                                             el: '#prompt-emptyQueryResult-table',
                                         }).render();
                                         chiseInstance.endSpinner('neighborhood-sifgraph-spinner');
                                     } else {
+                                        console.log("---------------8")
                                         new PromptInvalidQueryView({
                                             el: '#prompt-invalidQuery-table',
                                         }).render();
@@ -2663,6 +2678,7 @@ var PathsBetweenSIFgraphQueryView = Backbone.View.extend({
                                     }
                                 },
                                 error: function (xhr, options, err) {
+                                    console.log("---------------9")
                                     new PromptInvalidQueryView({
                                         el: '#prompt-invalidQuery-table',
                                     }).render();
